@@ -137,6 +137,12 @@ extern unsigned long ulMainGetRunTimeCounterValue(void);
 #ifndef configTIMER_TASK_STACK_DEPTH
 #define configTIMER_TASK_STACK_DEPTH ( 1024 )
 #endif
+#ifndef configCORE0_TASK_STACK_DEPTH
+#define configCORE0_TASK_STACK_DEPTH ( 1024 )
+#endif
+#ifndef configCORE1_TASK_STACK_DEPTH
+#define configCORE1_TASK_STACK_DEPTH ( 1024 )
+#endif
 
 /*  Set the following definitions to 1 to include the API function, or zero
     to exclude the API function. */
