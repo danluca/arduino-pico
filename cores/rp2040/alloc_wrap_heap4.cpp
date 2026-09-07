@@ -64,6 +64,7 @@ extern "C" void* pvPortMalloc(size_t size);
 extern "C" void* pvPortCalloc(size_t count, size_t size);
 extern "C" void* pvPortRealloc(void* mem, size_t size);
 extern "C" void vPortFree(void* mem);
+extern "C" struct _reent *__getreent();
 // Tells a heap_4 (FreeRTOS) pointer apart from a newlib-heap pointer. newlib internals (e.g. tzset, locale, stdio scratch) 
 // still allocate through _malloc_r/_free_r, which keep their own arena above ucHeap. 
 // Without this discrimination a newlib pointer reaching the wrapped free() lands in vPortFree, 
