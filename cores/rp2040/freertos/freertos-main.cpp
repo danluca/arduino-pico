@@ -59,7 +59,7 @@ static void __core0(void *params) {
 
     if (setup1 || loop1) {
         TaskHandle_t c1;
-        xTaskCreate(__core1, "CORE1", 1024, 0, configMAX_PRIORITIES / 2, &c1);
+        xTaskCreate(__core1, "CORE1", configCORE1_TASK_STACK_DEPTH, 0, configMAX_PRIORITIES / 2, &c1);
         vTaskCoreAffinitySet(c1, 1 << 1);
     }
 
@@ -146,7 +146,7 @@ extern "C" void __no_inline_not_in_flash_func(__freertos_resume_other_core)() {
 
 void startFreeRTOS(void) {
     TaskHandle_t c0;
-    xTaskCreate(__core0, "CORE0", 1024, 0, configMAX_PRIORITIES / 2, &c0);
+    xTaskCreate(__core0, "CORE0", configCORE0_TASK_STACK_DEPTH, 0, configMAX_PRIORITIES / 2, &c0);
     vTaskCoreAffinitySet(c0, 1 << 0);
 
     // Create the idle-other-core tasks (for when flash is being written)
