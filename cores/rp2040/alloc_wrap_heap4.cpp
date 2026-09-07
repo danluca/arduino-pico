@@ -60,6 +60,12 @@ void operator delete[](void* p, const std::nothrow_t&) noexcept {
 extern "C" struct mallinfo __real_mallinfo();
 extern "C" void* __real_realloc(void* mem, size_t size);
 extern "C" void __real_free(void* mem);
+extern "C" void *__real__malloc_r(void *reent, size_t size);
+extern "C" void *__real__calloc_r(void *reent, size_t count, size_t size);
+extern "C" void *__real__realloc_r(void *reent, void *mem, size_t size);
+extern "C" void __real__free_r(void *reent, void *mem);
+extern "C" struct mallinfo __real__mallinfo_r(void *reent);
+extern "C" void *__real__memalign_r(void *reent, size_t align, size_t nbytes);
 extern "C" void* pvPortMalloc(size_t size);
 extern "C" void* pvPortCalloc(size_t count, size_t size);
 extern "C" void* pvPortRealloc(void* mem, size_t size);
@@ -87,6 +93,66 @@ extern "C" void *__wrap_malloc(size_t size) {
 
 extern "C" void *__wrap_calloc(size_t count, size_t size) {
     return pvPortCalloc(count, size); // Don't need to disable interrupts here, FreeRTOS heap_4 is thread safe
+}
+
+extern "C" void *__wrap__malloc_r(void *reent, size_t size) {
+    noInterrupts();
+    void *rc = __real__malloc_r(reent, size);
+    interrupts();
+    return rc;
+}
+
+extern "C" void *__wrap__calloc_r(void *reent, size_t count, size_t size) {
+    noInterrupts();
+    void *rc = __real__calloc_r(reent, count, size);
+    interrupts();
+    return rc;
+}
+
+extern "C" void *__wrap__realloc_r(void *reent, void *mem, size_t size) {
+    void *rc;
+    noInterrupts();
+#ifdef RP2350_PSRAM_CS
+    if (mem && (mem < __ram_start)) {
+        rc = __psram_realloc(mem, size);
+    } else {
+        rc = __real__realloc_r(reent, mem, size);
+    }
+#else
+    rc = __real__realloc_r(reent, mem, size);
+#endif
+    interrupts();
+    return rc;
+}
+
+extern "C" void __wrap__free_r(void *reent, void *mem) {
+    noInterrupts();
+#ifdef RP2350_PSRAM_CS
+    if (mem && (mem < __ram_start)) {
+        __psram_free(mem);
+    } else {
+        __real__free_r(reent, mem);
+    }
+#else
+    __real__free_r(reent, mem);
+#endif
+    interrupts();
+}
+
+extern "C" struct mallinfo __wrap__mallinfo_r(void *reent) {
+    noInterrupts();
+    __malloc_lock(__getreent());
+    auto ret = __real__mallinfo_r(reent);
+    __malloc_unlock(__getreent());
+    interrupts();
+    return ret;
+}
+
+extern "C" void *__wrap__memalign_r(void *reent, size_t align, size_t nbytes) {
+    noInterrupts();
+    void *rc = __real__memalign_r(reent, align, nbytes);
+    interrupts();
+    return rc;
 }
 
 #ifdef RP2350_PSRAM_CS
