@@ -34,6 +34,8 @@ namespace BearSSL {
 
 class WiFiClientSecureCtx : public WiFiClient {
 public:
+    using WiFiClient::write;
+
     WiFiClientSecureCtx();
     WiFiClientSecureCtx(const WiFiClientSecureCtx &rhs) = delete;
     ~WiFiClientSecureCtx() override;
@@ -360,6 +362,7 @@ class WiFiClientSecure : public WiFiClient {
     // TODO: prefer implementing virtual overrides in the .cpp (or, at least one of them)
 
 public:
+    using WiFiClient::write;
 
     WiFiClientSecure(): _ctx(new WiFiClientSecureCtx()) {
         _owned = _ctx.get();
