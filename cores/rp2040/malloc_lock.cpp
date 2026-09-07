@@ -17,6 +17,7 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+#if !defined(__FREERTOS) || ( configFREERTOS_HEAP_SCHEME == 3 )
 
 #include <Arduino.h>
 #include <malloc.h>
@@ -141,3 +142,5 @@ extern "C" void *__wrap__memalign_r(void *reent, size_t align, size_t nbytes) {
     return rc;
 }
 
+
+#endif // !defined(__FREERTOS) || ( configFREERTOS_HEAP_SCHEME == 3 )

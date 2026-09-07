@@ -36,6 +36,14 @@
 #ifndef configTOTAL_HEAP_SIZE
 #define configTOTAL_HEAP_SIZE             ( ( size_t ) ( 164 * 1024 ) )
 #endif
+#ifndef configFREERTOS_HEAP_SCHEME
+/* configFREERTOS_HEAP_SCHEME selects which FreeRTOS heap implementation is built.
+ * Use 3 for heap_3a.c (default) or 4 for heap_4.c.
+ * Note heap_4.c is a copy from FreeRTOS-kernel submodule and is more complex but can coalesce adjacent free blocks 
+ * to reduce fragmentation, and is recommended for long-running applications. 
+ */
+#define configFREERTOS_HEAP_SCHEME               3
+#endif
 #ifndef configMAX_TASK_NAME_LEN
 #define configMAX_TASK_NAME_LEN           ( 10 )
 #endif

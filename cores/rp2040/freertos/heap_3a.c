@@ -1,4 +1,4 @@
-#ifdef __FREERTOS
+#if defined(__FREERTOS) && ( configFREERTOS_HEAP_SCHEME == 3 )
 // Hacked to remove the vTaskSuspendAll from heap_3.c.  We handle that in malloc wrappers
 
 /*
@@ -102,4 +102,4 @@ void vPortHeapResetState(void) {
     /* No state needs to be re-initialised in heap_3. */
 }
 /*-----------------------------------------------------------*/
-#endif
+#endif /* defined(__FREERTOS) && ( configFREERTOS_HEAP_SCHEME == 3 ) */
