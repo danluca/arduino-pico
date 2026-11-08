@@ -39,16 +39,16 @@ extern "C" {
 PDMClass::PDMClass(int dinPin, int clkPin) :
     _dinPin(dinPin),
     _clkPin(clkPin),
-    _onReceive(NULL),
-    _gain(-1),
     _channels(-1),
     _samplerate(-1),
+    _gain(-1),
     _init(-1),
     _cutSamples(100),
     _dmaChannel(0),
     _pio(nullptr),
     _smIdx(-1),
-    _pgmOffset(-1) {
+    _pgmOffset(-1),
+    _onReceive(NULL) {
 }
 
 PDMClass::~PDMClass() {
